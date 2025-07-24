@@ -1,4 +1,4 @@
-# IA Explicável para modelos clássicos e convolucionais
+# IA Explicável aplicada a Random Forest e MobileNetV2
 
 #### Aluno: [Luiz Fernando da Costa Castro](https://github.com/lfcastro95)
 #### Orientadora: [Manoela Kohler](https://github.com/manoelakohler).
@@ -13,9 +13,9 @@ Trabalho apresentado ao curso [BI MASTER](https://ica.puc-rio.ai/bi-master) como
 
 Este trabalho apresenta uma análise comparativa entre abordagens clássicas e baseadas em redes neurais convolucionais (CNN) para classificação de imagens reais, multiclasse, de diferentes espécies de plantas. Foi aplicada uma metodologia de Explainable AI (XAI) para interpretar os resultados de ambos os modelos, utilizando técnicas como Permutação e Grad-CAM.
 
-Imagens reais foram utilizadas e passaram por processo de data augmentation com o objetivo de aumentar a robustez do modelo. O projeto mostra que, mesmo com estratégias adequadas de regularização (L1/L2), aumento de dados e fine-tuning, redes profundas ainda tem dificuldade para superar modelos clássicos em acurácia, especialmente quando esses possuem dados tabulares bem documentados e estruturados.
+Imagens reais foram utilizadas e passaram por processo de data augmentation com o objetivo de aumentar a robustez do modelo. O projeto mostra que, mesmo com estratégias adequadas de regularização (L1/L2), augmentation e fine-tuning, redes profundas ainda tem dificuldade para superar modelos clássicos em acurácia, especialmente quando esses possuem dados tabulares bem documentados e estruturados.
 
-Apesar da acurácia menor do modelo convolucional, é impressionante notar que mesmo com poucas imagens disponíveis ele atingiu resultados satisfatórios. Por um lado, o modelo clássico depende de medições precisas e de trabalho mais intensivo para tabular os dados, por outro, o modelo de redes convolucionais precisa de mais trabalho no refinamento do modelo e de otimização de parâmetros para que alcance bons resultados.
+Apesar da acurácia menor do modelo convolucional, é impressionante notar os resultados satisfatórios alcançados quando usamos uma rede pré-treinada em um novo contexto. Por um lado, o modelo clássico depende de medições precisas e de trabalho mais intensivo para tabular os dados, por outro, o modelo de redes convolucionais precisa de mais trabalho no refinamento do modelo e de otimização de parâmetros para que alcance bons resultados.
 
 ### 1. Introdução
 
@@ -23,13 +23,26 @@ Os modelos de  classificação de espécies são um problema clássico e bastant
 
 O escopo desse trabalho não é avaliar os melhores modelos, parâmetros e técnicas. Portanto, para o modelo clássico utilizado, optou-se por um já bem reconhecido pela sua capacidade de lidar com esse tipo de dataset. Já para o modelo convolucional os métodos descritos anteriormente foram utilizados não para encontrar o melhor modelo ou os melhores parâmetros possíveis, mas para chegar-se a uma acurácia satisfatória que permitisse aprofundar a análise.
 
+O principal objetivo do projeto é demonstrar técnicas de explicabilidade de inteligência artificial. Assim, veremos em ação alguns métodos que nos ajudarão a entender, por diferentes perspectivas, como cada tipo de modelo toma suas decisões. Cada modelo, ainda que pertencente à mesma categoria de Machine Learning ou Rede Neural, possui um método mais adequado para se entender os parâmetros que chegaram ao resultado, portanto o intuito não é uma exposição dos diferentes tipos de Inteligência Artificial Explicável, mas sim demonstrar dois exemplos práticos.
+
 ### 2. Datasets
 
-Para uma análise comparativa efetiva foram priorizados datasets parecidos. Assim, optou-se pela clássica base de dados de Iris e por uma versão alternativa composta por imagens de Iris. Ambas possuem as mesmas classes para classificação:
+Para uma análise comparativa efetiva foram priorizados datasets parecidos. Assim, optou-se pela clássica base de dados tabulares de Iris no caso do modelo de Machine Learning e por uma famosa base de dados de Flores no caso do modelo de Rede Neural.
+
+No primeiro caso, há 3 classes para classificação:
 
 * Iris-setosa
 * Iris-versicolor
 * Iris-virginica
+
+No segundo caso, há 5 classes para classificação:
+
+* Daisy (Margarida)
+* Dandelion (Dente-de-leão)
+* Rose (Rosa)
+* Sunflower (Girassol)
+* Tulip (Tulipa)
+
 
 ### 3. Modelagem de Treinamento
 
@@ -37,7 +50,7 @@ A modelagem foi dividida em duas partes:
 
 * Modelo Clássico: foi utilizado Machine Learning tradicional baseado no Random Forest. O modelo apresenta ampla usabilidade nos problemas de classificação supervisionado e se mostra especialmente útil para categorização de objetos com base em medições precisas. Além de ser bem documentado seu uso no dataset de Iris. A explicabilidade foi conduzida via Permutabilidade.
 
-* Modelo Rede Neural Convolucional: foi implementada uma arquitetura baseada no modelo pré-treinado MobileNetV2. Para aumentar a base de imagens foram utilizadas diversas técnicas de augmentation. Os parâmetros definidos para treinamento foram de 64 neurônios para última camada, ativação por ReLU e regularização L1/L2. Além disso, para predições, o modelo utiliza ativação por Softmax. Grad-CAM foi utilizado para inspecionar visualmente as ativações relevantes nas imagens.
+* Modelo Rede Neural Convolucional: foi implementada uma arquitetura baseada no modelo pré-treinado MobileNetV2. Para dar variabilidade e evitar overfitting, foram utilizadas diversas técnicas de augmentation no dataset de treino. Os parâmetros definidos para treinamento foram de 64 neurônios para última camada, ativação por ReLU e regularização L1/L2. Além disso, para predições, o modelo utiliza ativação por Softmax. Grad-CAM foi utilizado para inspecionar visualmente as ativações relevantes nas imagens.
 
 ### 4. Modelagem da IA Explicável
 
@@ -47,7 +60,7 @@ A modelagem foi dividida em duas partes:
 
 ### 3. Resultados
 
-O modelo clássico superou o modelo CNN em acurácia. Apesar das técnicas de data augmentation utilizadas, do oversampling, dos métodos de regularização e do fine-tuning, o modelo CNN apresentou resultado final inferior ao modelo de Machine Learning tradicional.
+O modelo clássico superou o modelo CNN em acurácia. Apesar das técnicas de data augmentation utilizadas, dos métodos de regularização e do fine-tuning, o modelo CNN apresentou resultado final inferior ao modelo de Machine Learning tradicional.
 
 Conforme o escopo deste trabalho, buscamos a explicação para essa diferença de acurácia na forma que os modelos treinam e na importância dos parâmetros na tomada de decisão. Para o modelo clássico, identificamos acurácia próxima a 100%, enquanto o modelo CNN teve acurácia de aproximadamente 80%.
 
@@ -55,7 +68,7 @@ Dois parâmetros do modelo clássico são determinantes para a tomada de decisã
 
 Quanto ao modelo CNN, não é possível utilizarmos técnica semelhante ao modelo clássico para identificação da importância dos parâmetros. Por ser baseado no treinamento de camadas, padrões espaciais e neurônios, até seria possível verificar quais filtros foram mais ativados e a importância de cada neurônio, mas os resultados seriam pouco interpretativos para seres humanos e portanto, ainda que seja possível, é inutilizável para explicação. O Grad-CAM nos permite ver de forma mais humana como cada imagem foi analisada.
 
-A explicabilidade dos modelos é matematicamente mais clara no modelo clássico, uma vez que esse modelo se baseia em dados tabulares para tomar suas decisões e a permutação nos permite montar gráficos que esclarecem essa diferença. Visualmente, no entanto, o modelo Convolucional se aproxima da interpretação humana e seus resultados são bastante acurados. O Grad-CAM mostra que o modelo acertou por distinguir corretamente as plantas do entorno e por identificar as diferenças entre os diferentes tipos de Iris com base no seu treinamento. Já nos casos errados, o modelo identificou o entorno como área de atenção para a classificação ou identificou a região da Iris, mas não o suficiente para distinguir entre as três espécies.
+A explicabilidade dos modelos é matematicamente mais clara no modelo clássico, uma vez que esse modelo se baseia em dados tabulares para tomar suas decisões e a permutação nos permite montar gráficos que esclarecem essa diferença. Visualmente, no entanto, o modelo Convolucional se aproxima da interpretação humana e seus resultados são bastante acurados. O Grad-CAM mostra que o modelo acertou por distinguir corretamente as plantas de seu entorno e por identificar as diferenças entre os diferentes tipos de flores com base no seu treinamento. Já nos casos errados, o modelo identificou o entorno como área de atenção para a classificação ou identificou a região das flores, mas não o suficiente para distinguir entre as cinco espécies.
 
 ### 4. Conclusões
 
